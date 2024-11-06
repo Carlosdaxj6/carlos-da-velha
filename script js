@@ -1,0 +1,62 @@
+let board = ["", "", "", "", "", "", "", "", ""];
+let currentPlayer = "X";  // Jogador começa com "X"
+let gameOver = false;
+
+// Função para fazer um movimento
+function makeMove(index) {
+  if (gameOver || board[index] !== "") return; // Se a célula já está preenchida ou o jogo terminou, não faz nada
+
+  // Registra o movimento do jogador na célula escolhida
+  board[index] = currentPlayer;
+  console.log(board); // Para ver a mudança do tabuleiro no console
+
+  // Verifica se o jogador atual venceu
+  if (checkWinner()) {
+    console.log(`Jogador ${currentPlayer} venceu!`);
+    gameOver = true;
+  } else if (board.every(cell => cell !== "")) {
+    // Se todas as células estão preenchidas e não há vencedor, é um empate
+    console.log("Empate!");
+    gameOver = true;
+  } else {
+    // Alterna o jogador
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
+    console.log(`Vez do jogador ${currentPlayer}`);
+  }
+}
+
+// Função que verifica se há um vencedor
+function checkWinner() {
+  const winningCombination = [
+    [0, 1, 2], // Linha superior
+    [3, 4, 5], // Linha do meio
+    [6, 7, 8], // Linha inferior
+    [0, 3, 6], // Coluna esquerda
+    [1, 4, 7], // Coluna do meio
+    [2, 5, 8], // Coluna direita
+    [0, 4, 8], // Diagonal principal
+    [2, 4, 6], // Diagonal inversa
+  ];
+
+  return winningCombination.some(combination => {
+    const [a, b, c] = combination;
+    return board[a] && board[a] === board[b] && board[a] === board[c];
+  });
+}
+
+// Função para reiniciar o jogo
+function resetGame() {
+  board = ["", "", "", "", "", "", "", "", ""];
+  currentPlayer = "X";
+  gameOver = false;
+  console.log("Jogo reiniciado. Vez do jogador X");
+}
+
+// Exemplo de como as funções podem ser usadas
+// Aqui estamos fazendo os movimentos manualmente e verificando os resultados:
+
+makeMove(0); // Jogador X
+makeMove(1); // Jogador O
+makeMove(3); // Jogador X
+makeMove(4); // Jogador O
+makeMove(6); // Jogador X (Vencedor)
